@@ -1,0 +1,2 @@
+rootProject.name = "TimeView"
+include ':app'
