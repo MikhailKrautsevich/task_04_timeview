@@ -28,31 +28,25 @@ class TimeView @JvmOverloads constructor(
     // длина задней части стрелки
     private var mClockHandBackLength = 0F
 
+    // толщина линии циферблата и минутной стрелки
     private var mDefPaintThickness = 15F
     private var mSecHandThickness = 10F
     private var mHourHandThickness = 25F
 
-    private val mDefPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private var mClockFaceColor = Color.CYAN
+    private var mSecHandColor = Color.CYAN
+    private var mMinHandColor = Color.CYAN
+    private var mHourHandColor = Color.CYAN
+
+    private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         strokeWidth = mDefPaintThickness
         style = Paint.Style.STROKE
-        color = Color.CYAN
-    }
-
-    private val mSecPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeWidth = mSecHandThickness
-        style = Paint.Style.STROKE
-        color = Color.CYAN
-    }
-
-    private val mHourPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeWidth = mHourHandThickness
-        style = Paint.Style.STROKE
-        color = Color.CYAN
+        color = mClockFaceColor
     }
 
     private var mTime: Calendar = GregorianCalendar.getInstance()
 
-    inner class TimeViewUpdateTask : TimerTask(){
+    inner class TimeViewUpdateTask : TimerTask() {
         override fun run() {
             mTime = GregorianCalendar.getInstance()
             invalidate()
@@ -89,13 +83,7 @@ class TimeView @JvmOverloads constructor(
         Log.d(LOG, "onDraw")
 
         canvas?.let {
-            canvas.save()
             drawClockFace(canvas)
-            for (i in 0..11) {
-                drawClockLabel(canvas)
-                canvas.rotate(30F, mCenterX, mCenterY)
-            }
-            canvas.restore()
             drawSecHand(canvas, mTime)
             drawMinHand(canvas, mTime)
             drawHourHand(canvas, mTime)
@@ -103,7 +91,17 @@ class TimeView @JvmOverloads constructor(
     }
 
     private fun drawClockFace(canvas: Canvas) {
-        canvas.drawCircle(mCenterX, mCenterY, mClockFaceRadius, mDefPaint)
+        canvas.save()
+        mPaint.apply {
+            strokeWidth = mDefPaintThickness
+            color = mClockFaceColor
+        }
+        canvas.drawCircle(mCenterX, mCenterY, mClockFaceRadius, mPaint)
+        for (i in 0..11) {
+            drawClockLabel(canvas)
+            canvas.rotate(30F, mCenterX, mCenterY)
+        }
+        canvas.restore()
     }
 
     private fun drawClockLabel(canvas: Canvas) {
@@ -112,7 +110,7 @@ class TimeView @JvmOverloads constructor(
             mCenterY - mClockFaceRadius,
             mCenterX,
             mCenterY - mClockFaceRadius + mClockLabelLenght,
-            mDefPaint
+            mPaint
         )
     }
 
@@ -121,6 +119,10 @@ class TimeView @JvmOverloads constructor(
         val millies = time.get(Calendar.MILLISECOND)
         val angle = getSecHandRotateAngle(secs, millies)
         Log.d(LOG, "drawSecHand: secs = $secs, millies = $millies, angle = $angle")
+        mPaint.apply {
+            strokeWidth = mSecHandThickness
+            color = mSecHandColor
+        }
         canvas.save()
         canvas.rotate(angle, mCenterX, mCenterY)
         canvas.drawLine(
@@ -128,7 +130,7 @@ class TimeView @JvmOverloads constructor(
             mCenterY - mSecHandRadius,
             mCenterX,
             mCenterY + mClockHandBackLength,
-            mSecPaint
+            mPaint
         )
         canvas.restore()
     }
@@ -138,6 +140,10 @@ class TimeView @JvmOverloads constructor(
         val secs = time.get(Calendar.SECOND)
         val angle = getMinHandRotateAngle(mins, secs)
         Log.d(LOG, "drawSecHand: mins = $mins, secs = $secs, angle = $angle")
+        mPaint.apply {
+            strokeWidth = mDefPaintThickness
+            color = mMinHandColor
+        }
         canvas.save()
         canvas.rotate(angle, mCenterX, mCenterY)
         canvas.drawLine(
@@ -145,7 +151,7 @@ class TimeView @JvmOverloads constructor(
             mCenterY - mMinHandRadius,
             mCenterX,
             mCenterY + mClockHandBackLength,
-            mDefPaint
+            mPaint
         )
         canvas.restore()
     }
@@ -155,6 +161,10 @@ class TimeView @JvmOverloads constructor(
         val mins = time.get(Calendar.MINUTE)
         val angle = getHourHandRotateAngle(hours, mins)
         Log.d(LOG, "drawSecHand: hours = $hours, mins = $mins, angle = $angle")
+        mPaint.apply {
+            strokeWidth = mHourHandThickness
+            color = mHourHandColor
+        }
         canvas.save()
         canvas.rotate(angle, mCenterX, mCenterY)
         canvas.drawLine(
@@ -162,7 +172,7 @@ class TimeView @JvmOverloads constructor(
             mCenterY - mHourHandRadius,
             mCenterX,
             mCenterY + mClockHandBackLength,
-            mHourPaint
+            mPaint
         )
         canvas.restore()
     }
