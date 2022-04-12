@@ -30,6 +30,7 @@ class TimeView @JvmOverloads constructor(
     private var secHandRadius = 0F
     private var minHandRadius = 0F
     private var hourHandRadius = 0F
+
     // длина задней части стрелки
     private var clockHandBackLength = 0F
 
@@ -66,13 +67,16 @@ class TimeView @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-        Log.d(LOG, "onMeasure")
+        val widthToSet = MeasureSpec.getSize(widthMeasureSpec)
+        val heightToSet = MeasureSpec.getSize(heightMeasureSpec)
+
+        setMeasuredDimension(widthToSet, heightToSet)
 
         centerX = measuredWidth / 2F
         centerY = measuredHeight / 2F
-        val minSide  = if (measuredWidth > measuredHeight) {
+        val minSide = if (measuredWidth > measuredHeight) {
             measuredHeight
         } else measuredWidth
         clockFaceRadius = 0.5F * minSide * 0.95F
@@ -124,7 +128,7 @@ class TimeView @JvmOverloads constructor(
         val secs = time.get(Calendar.SECOND)
         val millies = time.get(Calendar.MILLISECOND)
         val angle = getSecHandRotateAngle(secs, millies)
-        Log.d(LOG, "drawSecHand: secs = $secs, millies = $millies, angle = $angle")
+//        Log.d(LOG, "drawSecHand: secs = $secs, millies = $millies, angle = $angle")
         paint.apply {
             strokeWidth = secHandThickness
             color = secHandColor
@@ -145,7 +149,7 @@ class TimeView @JvmOverloads constructor(
         val mins = time.get(Calendar.MINUTE)
         val secs = time.get(Calendar.SECOND)
         val angle = getMinHandRotateAngle(mins, secs)
-        Log.d(LOG, "drawSecHand: mins = $mins, secs = $secs, angle = $angle")
+//        Log.d(LOG, "drawSecHand: mins = $mins, secs = $secs, angle = $angle")
         paint.apply {
             strokeWidth = defPaintThickness
             color = minHandColor
@@ -166,7 +170,7 @@ class TimeView @JvmOverloads constructor(
         val hours = time.get(Calendar.HOUR)
         val mins = time.get(Calendar.MINUTE)
         val angle = getHourHandRotateAngle(hours, mins)
-        Log.d(LOG, "drawSecHand: hours = $hours, mins = $mins, angle = $angle")
+//        Log.d(LOG, "drawSecHand: hours = $hours, mins = $mins, angle = $angle")
         paint.apply {
             strokeWidth = hourHandThickness
             color = hourHandColor
