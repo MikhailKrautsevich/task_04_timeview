@@ -62,7 +62,7 @@ class TimeView @JvmOverloads constructor(
     private val sTask = TimeViewUpdateTask()
 
     init {
-        sTimer.schedule(sTask, 100, 50)
+        sTimer.schedule(sTask, 50, 50)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
