@@ -72,7 +72,7 @@ class TimeView @JvmOverloads constructor(
 
         mCenterX = measuredWidth / 2F
         mCenterY = measuredHeight / 2F
-        mClockFaceRadius = if (width > height) {
+        mClockFaceRadius = if (measuredWidth > measuredHeight) {
             mCenterY * 0.95F
         } else mCenterX * 0.95F
         mClockLabelLenght = mClockFaceRadius * 0.1F
