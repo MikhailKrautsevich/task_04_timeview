@@ -52,7 +52,7 @@ class TimeView @JvmOverloads constructor(
 
     private var mTime: Calendar = GregorianCalendar.getInstance()
 
-    inner class TimeViewUpdateTask(): TimerTask(){
+    inner class TimeViewUpdateTask : TimerTask(){
         override fun run() {
             mTime = GregorianCalendar.getInstance()
             invalidate()
@@ -119,7 +119,7 @@ class TimeView @JvmOverloads constructor(
     private fun drawSecHand(canvas: Canvas, time: Calendar) {
         val secs = time.get(Calendar.SECOND)
         val millies = time.get(Calendar.MILLISECOND)
-        val angle = getRotateAngle(secs, millies)
+        val angle = getSecHandRotateAngle(secs, millies)
         Log.d(LOG, "drawSecHand: secs = $secs, millies = $millies, angle = $angle")
         canvas.save()
         canvas.rotate(angle, mCenterX, mCenterY)
@@ -136,7 +136,7 @@ class TimeView @JvmOverloads constructor(
     private fun drawMinHand(canvas: Canvas, time: Calendar) {
         val mins = time.get(Calendar.MINUTE)
         val secs = time.get(Calendar.SECOND)
-        val angle = getRotateAngle(mins, secs)
+        val angle = getMinHandRotateAngle(mins, secs)
         Log.d(LOG, "drawSecHand: mins = $mins, secs = $secs, angle = $angle")
         canvas.save()
         canvas.rotate(angle, mCenterX, mCenterY)
@@ -167,10 +167,13 @@ class TimeView @JvmOverloads constructor(
         canvas.restore()
     }
 
-    // функция для вычисления угла поворота минутной и секундной стрелки с учетом влияния секунд и
-    // миллисекунд соответственно
-    private fun getRotateAngle(mainParam: Int, auxiliaryParam: Int) =
-        (auxiliaryParam / 1000F + mainParam) * 6
+    // функция для вычисления угла поворота секундной стрелки с учетом влияния миллисекунд
+    private fun getSecHandRotateAngle(secs: Int, millies: Int) =
+        (millies / 1000F + secs) * 6
+
+    // функция для вычисления угла поворота минутной стрелки с учетом влияния секунд
+    private fun getMinHandRotateAngle(mins: Int, secs: Int) =
+        6F * mins + 0.1F * secs
 
     // функция для вычисления угла поворота часовой стрелки с учетом влияния минут
     private fun getHourHandRotateAngle(hours: Int, mins: Int) =
