@@ -19,12 +19,17 @@ class TimeView @JvmOverloads constructor(
 
     private var mCenterX = 0F
     private var mCenterY = 0F
+
+    // длина стрелок относительно радиуса циферблата
+    private var mSecHandLenPercents = 0.85F
+    private var mMinHandLenPercents = 0.8F
+    private var mHourHandLenPercents = 0.5F
+
     private var mClockFaceRadius = 0F
     private var mClockLabelLenght = 0F
     private var mSecHandRadius = 0F
     private var mMinHandRadius = 0F
     private var mHourHandRadius = 0F
-
     // длина задней части стрелки
     private var mClockHandBackLength = 0F
 
@@ -71,9 +76,9 @@ class TimeView @JvmOverloads constructor(
             mCenterY * 0.95F
         } else mCenterX * 0.95F
         mClockLabelLenght = mClockFaceRadius * 0.1F
-        mSecHandRadius = mClockFaceRadius * 0.85F
-        mMinHandRadius = mClockFaceRadius * 0.8F
-        mHourHandRadius = mClockFaceRadius * 0.5F
+        mSecHandRadius = mClockFaceRadius * mSecHandLenPercents
+        mMinHandRadius = mClockFaceRadius * mMinHandLenPercents
+        mHourHandRadius = mClockFaceRadius * mHourHandLenPercents
         mClockHandBackLength = mHourHandRadius * 0.5F
     }
 
