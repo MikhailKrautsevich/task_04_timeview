@@ -69,8 +69,21 @@ class TimeView @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 //        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-        val widthToSet = MeasureSpec.getSize(widthMeasureSpec)
-        val heightToSet = MeasureSpec.getSize(heightMeasureSpec)
+        val widthUnSpec = 160
+        val heightUnSpec = 160
+
+        var widthToSet = MeasureSpec.getSize(widthMeasureSpec)
+        var heightToSet = MeasureSpec.getSize(heightMeasureSpec)
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+
+        if (widthMode == MeasureSpec.UNSPECIFIED) {
+            widthToSet = widthUnSpec
+        }
+        if (heightMode == MeasureSpec.UNSPECIFIED) {
+            heightToSet = heightUnSpec
+        }
+        Log.d(LOG, "widthMode = $widthMode, widthToSet = $widthToSet,\n heightMode = $heightMode, heightToSet = $heightToSet")
 
         setMeasuredDimension(widthToSet, heightToSet)
 
