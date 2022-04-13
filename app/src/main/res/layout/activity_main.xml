@@ -23,6 +23,11 @@
         app:layout_constraintBottom_toTopOf="@id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:secHandColor="@color/red"
+        app:minHandColor="@color/black"
+        app:hourHandColor="@color/teal_700"
+        app:minHandLenPercent="0.75"
+        app:backHandLenPercent="0.2"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

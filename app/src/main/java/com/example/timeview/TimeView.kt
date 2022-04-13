@@ -24,9 +24,11 @@ class TimeView @JvmOverloads constructor(
     private var secHandLenPercents = 0.85F
     private var minHandLenPercents = 0.8F
     private var hourHandLenPercents = 0.5F
+    // длина задней части стрелок относительно длины часовой стрелки
+    private var backHandLenPercent = 0.5F
 
     private var clockFaceRadius = 0F
-    private var clockLabelLenght = 0F
+    private var clockLabelLength = 0F
     private var secHandRadius = 0F
     private var minHandRadius = 0F
     private var hourHandRadius = 0F
@@ -40,6 +42,7 @@ class TimeView @JvmOverloads constructor(
     private var hourHandThickness = 25F
 
     private var clockFaceColor = Color.CYAN
+    private var clockFaceBackColor = Color.TRANSPARENT
     private var secHandColor = Color.CYAN
     private var minHandColor = Color.CYAN
     private var hourHandColor = Color.CYAN
@@ -63,6 +66,26 @@ class TimeView @JvmOverloads constructor(
     private val task = TimeViewUpdateTask()
 
     init {
+        context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.TimeView, 0, 0
+        ).apply {
+            try {
+                secHandLenPercents = getFloat(R.styleable.TimeView_secHandLenPercent, 0.85F)
+                minHandLenPercents = getFloat(R.styleable.TimeView_minHandLenPercent, 0.8F)
+                hourHandLenPercents = getFloat(R.styleable.TimeView_hourHandLenPercent, 0.5F)
+                backHandLenPercent = getFloat(R.styleable.TimeView_backHandLenPercent, 0.5F)
+
+                clockFaceColor = getColor(R.styleable.TimeView_clockFaceAndLabelColor, Color.CYAN)
+                clockFaceBackColor = getColor(R.styleable.TimeView_clockFaceBackColor, Color.TRANSPARENT)
+                secHandColor = getColor(R.styleable.TimeView_secHandColor, Color.CYAN)
+                minHandColor = getColor(R.styleable.TimeView_minHandColor, Color.CYAN)
+                hourHandColor = getColor(R.styleable.TimeView_hourHandColor, Color.CYAN)
+            }
+            finally {
+                recycle()
+            }
+        }
         timer.schedule(task, 50, 50)
     }
 
@@ -93,11 +116,11 @@ class TimeView @JvmOverloads constructor(
             measuredHeight
         } else measuredWidth
         clockFaceRadius = 0.5F * minSide * 0.95F
-        clockLabelLenght = clockFaceRadius * 0.1F
+        clockLabelLength = clockFaceRadius * 0.1F
         secHandRadius = clockFaceRadius * secHandLenPercents
         minHandRadius = clockFaceRadius * minHandLenPercents
         hourHandRadius = clockFaceRadius * hourHandLenPercents
-        clockHandBackLength = hourHandRadius * 0.5F
+        clockHandBackLength = hourHandRadius * backHandLenPercent
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -115,8 +138,17 @@ class TimeView @JvmOverloads constructor(
 
     private fun drawClockFace(canvas: Canvas) {
         canvas.save()
+        if (clockFaceBackColor != Color.TRANSPARENT) {
+            paint.apply {
+                strokeWidth = defPaintThickness
+                style = Paint.Style.FILL
+                color = clockFaceBackColor
+            }
+            canvas.drawCircle(centerX, centerY, clockFaceRadius, paint)
+        }
         paint.apply {
             strokeWidth = defPaintThickness
+            style = Paint.Style.STROKE
             color = clockFaceColor
         }
         canvas.drawCircle(centerX, centerY, clockFaceRadius, paint)
@@ -132,7 +164,7 @@ class TimeView @JvmOverloads constructor(
             centerX,
             centerY - clockFaceRadius,
             centerX,
-            centerY - clockFaceRadius + clockLabelLenght,
+            centerY - clockFaceRadius + clockLabelLength,
             paint
         )
     }
