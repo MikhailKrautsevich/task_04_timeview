@@ -24,6 +24,7 @@ class TimeView @JvmOverloads constructor(
     private var secHandLenPercents = 0.85F
     private var minHandLenPercents = 0.8F
     private var hourHandLenPercents = 0.5F
+
     // длина задней части стрелок относительно длины часовой стрелки
     private var backHandLenPercent = 0.5F
 
@@ -54,14 +55,6 @@ class TimeView @JvmOverloads constructor(
     }
 
     private var calendar: Calendar = GregorianCalendar.getInstance()
-
-    inner class TimeViewUpdateTask : TimerTask() {
-        override fun run() {
-            calendar = GregorianCalendar.getInstance()
-            invalidate()
-        }
-    }
-
     private val timer = Timer()
     private val task = TimeViewUpdateTask()
 
@@ -77,12 +70,12 @@ class TimeView @JvmOverloads constructor(
                 backHandLenPercent = getFloat(R.styleable.TimeView_backHandLenPercent, 0.5F)
 
                 clockFaceColor = getColor(R.styleable.TimeView_clockFaceAndLabelColor, Color.CYAN)
-                clockFaceBackColor = getColor(R.styleable.TimeView_clockFaceBackColor, Color.TRANSPARENT)
+                clockFaceBackColor =
+                    getColor(R.styleable.TimeView_clockFaceBackColor, Color.TRANSPARENT)
                 secHandColor = getColor(R.styleable.TimeView_secHandColor, Color.CYAN)
                 minHandColor = getColor(R.styleable.TimeView_minHandColor, Color.CYAN)
                 hourHandColor = getColor(R.styleable.TimeView_hourHandColor, Color.CYAN)
-            }
-            finally {
+            } finally {
                 recycle()
             }
         }
@@ -106,7 +99,10 @@ class TimeView @JvmOverloads constructor(
         if (heightMode == MeasureSpec.UNSPECIFIED) {
             heightToSet = heightUnSpec
         }
-        Log.d(LOG, "widthMode = $widthMode, widthToSet = $widthToSet,\n heightMode = $heightMode, heightToSet = $heightToSet")
+        Log.d(
+            LOG,
+            "widthMode = $widthMode, widthToSet = $widthToSet,\n heightMode = $heightMode, heightToSet = $heightToSet"
+        )
 
         setMeasuredDimension(widthToSet, heightToSet)
 
@@ -125,8 +121,7 @@ class TimeView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-
-        Log.d(LOG, "onDraw")
+//        Log.d(LOG, "onDraw")
 
         canvas?.let {
             drawClockFace(canvas)
@@ -243,4 +238,11 @@ class TimeView @JvmOverloads constructor(
     // функция для вычисления угла поворота часовой стрелки с учетом влияния минут
     private fun getHourHandRotateAngle(hours: Int, mins: Int) =
         hours * 30F + mins * 0.5F
+
+    inner class TimeViewUpdateTask : TimerTask() {
+        override fun run() {
+            calendar = GregorianCalendar.getInstance()
+            invalidate()
+        }
+    }
 }
