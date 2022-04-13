@@ -106,12 +106,22 @@ class TimeView @JvmOverloads constructor(
 
         setMeasuredDimension(widthToSet, heightToSet)
 
-        centerX = measuredWidth / 2F
-        centerY = measuredHeight / 2F
-        val minSide = if (measuredWidth > measuredHeight) {
-            measuredHeight
-        } else measuredWidth
-        clockFaceRadius = 0.5F * minSide * 0.95F
+        // обработка paddings: paddingLeft/Right влияют только если не определены paddingStart/End
+        val firstHorizontalPadding = if (paddingStart != null) paddingStart else paddingLeft
+        val secondHorizontalPadding = if (paddingEnd != null) paddingEnd else paddingRight
+
+        val widthWithoutPaddings =
+            measuredWidth - firstHorizontalPadding - secondHorizontalPadding - defPaintThickness
+        val heightWithoutPaddings = measuredHeight - paddingTop - paddingBottom - defPaintThickness
+
+        centerX = widthWithoutPaddings / 2F + firstHorizontalPadding + defPaintThickness / 2F
+        centerY = heightWithoutPaddings / 2F + paddingTop + defPaintThickness / 2F
+
+        val minSide = if (widthWithoutPaddings > heightWithoutPaddings) {
+            heightWithoutPaddings
+        } else widthWithoutPaddings
+
+        clockFaceRadius = 0.5F * minSide
         clockLabelLength = clockFaceRadius * 0.1F
         secHandRadius = clockFaceRadius * secHandLenPercents
         minHandRadius = clockFaceRadius * minHandLenPercents
