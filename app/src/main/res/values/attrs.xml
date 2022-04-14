@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TimeView">
+        <attr name="secHandColor" format="color" />
+        <attr name="minHandColor" format="color" />
+        <attr name="hourHandColor" format="color" />
+        <attr name="clockFaceAndLabelColor" format="color" />
+        <attr name="clockFaceBackColor" format="color" />
+
+        <attr name="secHandLenPercent" format="float" />
+        <attr name="minHandLenPercent" format="float" />
+        <attr name="hourHandLenPercent" format="float" />
+        <attr name="backHandLenPercent" format="float" />
+    </declare-styleable>
+</resources>
